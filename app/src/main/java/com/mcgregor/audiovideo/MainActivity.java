@@ -2,6 +2,7 @@ package com.mcgregor.audiovideo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -12,8 +13,10 @@ import android.widget.VideoView;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private VideoView myVideoView;
-    private Button btnPlayVideo;
+    private Button btnPlayVideo, btnPlayMusic, btnPauseMusic;
     private MediaController mediaController;
+    private MediaPlayer mediaPlayer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,10 +25,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         myVideoView = findViewById(R.id.myVideoView);
         btnPlayVideo = findViewById(R.id.btnPlayVideo);
+        btnPauseMusic = findViewById(R.id.btnPauseMusic);
+        btnPlayMusic = findViewById(R.id.btnPlayMusic);
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.caltonic);
+
         //mediaController = new MediaController(MainActivity.this);
 
         btnPlayVideo.setOnClickListener(MainActivity.this);
-
+        btnPauseMusic.setOnClickListener(MainActivity.this);
+        btnPlayMusic.setOnClickListener(MainActivity.this);
     }
 
     @Override
@@ -35,6 +44,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                playVideo();
                 break;
 
+            case R.id.btnPlayMusic:
+
+                mediaPlayer.start();
+                return;
+
+            case R.id.btnPauseMusic:
+                mediaPlayer.pause();
+                return;
         }
 
     }
