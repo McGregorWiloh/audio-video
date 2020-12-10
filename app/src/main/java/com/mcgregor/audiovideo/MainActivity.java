@@ -6,12 +6,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.MediaController;
 import android.widget.VideoView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private VideoView myVideoView;
     private Button btnPlayVideo;
+    private MediaController mediaController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,11 +22,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         myVideoView = findViewById(R.id.myVideoView);
         btnPlayVideo = findViewById(R.id.btnPlayVideo);
+        //mediaController = new MediaController(MainActivity.this);
+
+        btnPlayVideo.setOnClickListener(MainActivity.this);
 
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View buttonView) {
+        switch(buttonView.getId()) {
+            case R.id.btnPlayVideo:
+               playVideo();
+                break;
+
+        }
 
     }
 
@@ -33,9 +44,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public void playVideo(View video) {
-        String path = "C:\\Users\\WeVar\\AndroidStudioProjects\\MyApplication\\AudioVideo\\app\\src\\main\\res\\raw\\iphonevideo.mp4";
-        Uri u = Uri.parse(path);
+    public void playVideo() {
 
+        Uri u = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.iphonevideo);
+        myVideoView.setVideoURI(u);
+        mediaController = new MediaController(this);
+        myVideoView.setMediaController(mediaController);
+        mediaController.setAnchorView(myVideoView);
+        myVideoView.start();
     }
 }
