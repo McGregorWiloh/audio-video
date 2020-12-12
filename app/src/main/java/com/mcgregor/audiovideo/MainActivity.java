@@ -14,6 +14,9 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     //user interface components
     private VideoView myVideoView;
@@ -22,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MediaPlayer mediaPlayer; //object to control audio
     private SeekBar volumeSeekBar, progressSeekBar;
     private AudioManager audioManager;
+    private Timer timer;
 
 
 
@@ -47,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         volumeSeekBar.setProgress(currentVolumeOfUserDevice); //setting current volume value
 
         progressSeekBar.setOnSeekBarChangeListener(MainActivity.this); //the main activity will listen since we have implement the onSeek in it
+        progressSeekBar.setMax(mediaPlayer.getDuration());
 
         volumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -78,18 +83,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View buttonView) {
+
         switch(buttonView.getId()) {
             case R.id.btnPlayVideo:
                playVideo();
+
                 break;
 
             case R.id.btnPlayMusic:
 
                 mediaPlayer.start();
+                timer = new Timer();
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        progressSeekBar.setProgress(mediaPlayer.getCurrentPosition());
+                    }
+                },0,1000);
+
                 return;
 
             case R.id.btnPauseMusic:
+
                 mediaPlayer.pause();
+                timer.cancel();
+
                 return;
         }
 
@@ -114,12 +132,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
         if(fromUser) {
-            progressSeekBar.setMax(mediaPlayer.getDuration());
+            Toast.makeText(this, Integer.toString(progress), Toast.LENGTH_SHORT).show();
+            progressSeekBar.setProgress(progress);
+            mediaPlayer.seekTo(progress);
         }
     }
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
+
+
 
     }
 

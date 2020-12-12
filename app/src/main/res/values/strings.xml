@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Audio Video</string>
+    <string name="play_video">Play Video</string>
+    <string name="play_music">Play Music</string>
+    <string name="pause_music">Pause Music</string>
+    <string name="song_duration">Song Duration:</string>
+    <string name="volume">Volume:</string>
+
+</resources>
